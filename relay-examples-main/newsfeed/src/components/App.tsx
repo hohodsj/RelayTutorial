@@ -9,6 +9,7 @@ export default function App(): React.ReactElement {
       <React.Suspense
         fallback={
           <div className="app-loading-spinner">
+            <p>Loading la...</p>
             <LoadingSpinner />
           </div>
         }
