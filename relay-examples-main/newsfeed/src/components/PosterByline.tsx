@@ -12,7 +12,7 @@ const PosterBylineFragment = graphql`
   fragment PosterBylineFragment on Actor {
     name
     profilePicture {
-      url
+      ...ImageFragment
     }
   }`;
 
