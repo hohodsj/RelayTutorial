@@ -18,10 +18,7 @@ const StoryFragment = graphql`
     summary
     createdAt
     poster {
-      name
-      profilePicture {
-        url
-      }
+      ...PosterBylineFragment
     }
     thumbnail {
       url
