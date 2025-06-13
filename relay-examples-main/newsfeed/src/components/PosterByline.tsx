@@ -1,15 +1,15 @@
 import Hovercard from "./Hovercard";
-import PosterDetailsHovercardContents from './PosterDetailsHovercardContents';
+import PosterDetailsHovercardContents from "./PosterDetailsHovercardContents";
 import * as React from "react";
 import Image from "./Image";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, useQueryLoader } from "react-relay";
 import type { PosterBylineFragment$key } from "./__generated__/PosterBylineFragment.graphql";
-const {useRef} = React;
-
-
+import type { PosterDetailsHovercardContentsQuery as HovercardQueryType } from "./__generated__/PosterDetailsHovercardContentsQuery.graphql";
+import { PosterDetailsHovercardContentsQuery } from "./PosterDetailsHovercardContents";
+const { useRef } = React;
 
 export type Props = {
-  poster: PosterBylineFragment$key
+  poster: PosterBylineFragment$key;
 };
 
 const PosterBylineFragment = graphql`
@@ -19,7 +19,8 @@ const PosterBylineFragment = graphql`
     profilePicture {
       ...ImageFragment @arguments(width: 60, height: 60)
     }
-  }`;
+  }
+`;
 
 export default function PosterByline({ poster }: Props): React.ReactElement {
   if (poster == null) {
@@ -27,6 +28,13 @@ export default function PosterByline({ poster }: Props): React.ReactElement {
   }
   const data = useFragment(PosterBylineFragment, poster);
   const hoverRef = useRef(null);
+  
+  const [hovercardQueryRef, loadHovercardQuery] =
+    useQueryLoader<HovercardQueryType>(PosterDetailsHovercardContentsQuery);
+  function onBeginHover() {
+    loadHovercardQuery({ posterID: data.id });
+  }
+  
   return (
     <div ref={hoverRef} className="byline">
       <Image
@@ -36,8 +44,8 @@ export default function PosterByline({ poster }: Props): React.ReactElement {
         className="byline__image"
       />
       <div className="byline__name">{data.name}</div>
-      <Hovercard targetRef={hoverRef}>
-        <PosterDetailsHovercardContents posterID={data.id}/>
+      <Hovercard onBeginHover={onBeginHover} targetRef={hoverRef}>
+        <PosterDetailsHovercardContents queryRef={hovercardQueryRef} />
       </Hovercard>
     </div>
   );
