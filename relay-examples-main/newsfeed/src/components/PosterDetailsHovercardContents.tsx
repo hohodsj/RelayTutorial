@@ -1,5 +1,10 @@
 import * as React from "react";
-import { useLazyLoadQuery, useFragment, PreloadedQuery, usePreloadedQuery } from "react-relay";
+import {
+  useLazyLoadQuery,
+  useFragment,
+  PreloadedQuery,
+  usePreloadedQuery,
+} from "react-relay";
 import { graphql } from "relay-runtime";
 import Image from "./Image";
 import Timestamp from "./Timestamp";
@@ -18,11 +23,12 @@ export const PosterDetailsHovercardContentsQuery = graphql`
   }
 `;
 
-export default function PosterDetailsHovercardContents({queryRef}: {queryRef: PreloadedQuery<QueryType>,}): React.ReactElement {
-  const data = usePreloadedQuery(
-    PosterDetailsHovercardContentsQuery,
-    queryRef
-  )
+export default function PosterDetailsHovercardContents({
+  queryRef,
+}: {
+  queryRef: PreloadedQuery<QueryType>;
+}): React.ReactElement {
+  const data = usePreloadedQuery(PosterDetailsHovercardContentsQuery, queryRef);
   return (
     <div className="posterHovercard">
       <PosterDetailsHovercardContentsBody poster={data.node} />
@@ -67,11 +73,11 @@ function PosterDetailsHovercardContentsBody({
       <ul className="posterHovercard__details">
         <li>
           Joined <Timestamp time={data.joined} />
-          {data.location != null && (
-            <li>{data.location.name}</li>
-          )}
+          {data.location != null && <li>{data.location.name}</li>}
           {data.organizationKind != null && (
-            <li><OrganizationKind kind={data.organizationKind} /></li>
+            <li>
+              <OrganizationKind kind={data.organizationKind} />
+            </li>
           )}
         </li>
       </ul>
