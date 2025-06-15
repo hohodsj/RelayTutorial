@@ -7,6 +7,7 @@ import Image from "./Image";
 import Timestamp from "./Timestamp";
 import { graphql, useFragment } from "react-relay";
 import type { StoryFragment$key } from "./__generated__/StoryFragment.graphql";
+import StoryCommentsSection from './StoryCommentsSection';
 
 type Props = {
   story: StoryFragment$key;
@@ -23,6 +24,7 @@ const StoryFragment = graphql`
     thumbnail {
       ...ImageFragment @arguments(width: 400)
     }
+    ...StoryCommentsSectionFragment
   }
 `;
 
@@ -35,6 +37,7 @@ export default function Story({ story }: Props): React.ReactElement {
       <Timestamp time={data.createdAt} />
       <Image image={data.thumbnail} width={400} height={400} />
       <StorySummary summary={data.summary} />
+      <StoryCommentsSection story={data} />
     </Card>
   );
 }
